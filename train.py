@@ -61,7 +61,8 @@ def eval_epoch(model, loader, criterion, device):
 
 
 def build_eval_table(model, loader, device, max_rows=500):
-    """Collect predictions on the test set; return a DataFrame for log_table."""
+    """Collect predictions on the test set; return a DataFrame for log_table.
+    """
     model.eval()
     actuals, preds, confs = [], [], []
     seen = 0
@@ -136,7 +137,7 @@ def main(args):
             "hidden_units": "256-128",
         })
 
-        # ── Training loop ─────────────────────────────────────────────────────
+        # ── Training loop ────────────────────────────────────────────────────
         for epoch in range(1, args.epochs + 1):
             train_loss, train_acc = train_epoch(
                 model, train_loader, criterion, optimizer, device
