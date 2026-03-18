@@ -9,6 +9,8 @@ import mlflow
 import mlflow.pytorch
 
 # ── Model ─────────────────────────────────────────────────────────────────────
+
+
 class MLP(nn.Module):
     def __init__(self):
         super().__init__()
@@ -119,7 +121,7 @@ def main(args):
         # ── Training loop ─────────────────────────────────────────────────────
         for epoch in range(1, args.epochs + 1):
             train_loss, train_acc = train_epoch(model, train_loader, criterion, optimizer, device)
-            val_loss,   val_acc   = eval_epoch (model, test_loader,  criterion, device)
+            val_loss,   val_acc   = eval_epoch(model, test_loader,  criterion, device)
 
             mlflow.log_metrics({
                 "train_loss": train_loss,
