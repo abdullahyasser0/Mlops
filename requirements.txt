@@ -50,7 +50,7 @@ opentelemetry-api==1.40.0
 opentelemetry-proto==1.40.0
 opentelemetry-sdk==1.40.0
 opentelemetry-semantic-conventions==0.61b0
-packaging @ file:///C:/miniconda3/conda-bld/packaging_1761049101700/work
+packaging>=23.0
 pandas==2.3.3
 pillow==12.1.1
 prettytable==3.17.0
