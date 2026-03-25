@@ -1,10 +1,10 @@
 import sys
 import mlflow
+import dagshub
 
 
 def main():
-    import os
-    mlflow.set_tracking_uri(os.environ["MLFLOW_TRACKING_URI"])
+    dagshub.init(repo_owner="abdullahyasser0", repo_name="Mlops", mlflow=True)
 
     run_id = open("model_info.txt").read().strip()
     print(f"Checking accuracy for Run ID: {run_id}")

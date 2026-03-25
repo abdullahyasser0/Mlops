@@ -7,6 +7,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import mlflow
 import mlflow.pytorch
+import dagshub
 
 
 # ── Model ────────────────────────────────────────────────────────────────────
@@ -118,8 +119,7 @@ def main(args):
         model.parameters(), lr=args.learning_rate, momentum=0.9
     )
 
-    import os
-    mlflow.set_tracking_uri(os.environ["MLFLOW_TRACKING_URI"])
+    dagshub.init(repo_owner="abdullahyasser0", repo_name="Mlops", mlflow=True)
     mlflow.set_experiment("Assignment3_Abdullah_Yasser")
 
     with mlflow.start_run(run_name=args.run_name):
