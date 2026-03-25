@@ -118,7 +118,9 @@ def main(args):
         model.parameters(), lr=args.learning_rate, momentum=0.9
     )
 
-    mlflow.set_tracking_uri("./mlruns")
+    import os
+    tracking_uri = os.environ.get("MLFLOW_TRACKING_URI", "./mlruns") or "./mlruns"
+    mlflow.set_tracking_uri(tracking_uri)
     mlflow.set_experiment("Assignment3_Abdullah_Yasser")
 
     with mlflow.start_run(run_name=args.run_name):
