@@ -3,6 +3,8 @@ import mlflow
 
 
 def main():
+    mlflow.set_tracking_uri("./mlruns")
+
     run_id = open("model_info.txt").read().strip()
     print(f"Checking accuracy for Run ID: {run_id}")
 
