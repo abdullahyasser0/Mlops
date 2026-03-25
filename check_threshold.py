@@ -4,8 +4,7 @@ import mlflow
 
 def main():
     import os
-    tracking_uri = os.environ.get("MLFLOW_TRACKING_URI", "./mlruns") or "./mlruns"
-    mlflow.set_tracking_uri(tracking_uri)
+    mlflow.set_tracking_uri(os.environ["MLFLOW_TRACKING_URI"])
 
     run_id = open("model_info.txt").read().strip()
     print(f"Checking accuracy for Run ID: {run_id}")

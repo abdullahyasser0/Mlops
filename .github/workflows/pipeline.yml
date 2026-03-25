@@ -64,12 +64,6 @@ jobs:
           name: model-info
           path: model_info.txt
 
-      - name: Upload MLflow tracking data
-        uses: actions/upload-artifact@v4
-        with:
-          name: mlruns-data
-          path: mlruns/
-
   deploy:
     runs-on: ubuntu-latest
     needs: validate
@@ -89,12 +83,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: model-info
-
-      - name: Download MLflow tracking data
-        uses: actions/download-artifact@v4
-        with:
-          name: mlruns-data
-          path: mlruns/
 
       - name: Check Accuracy Threshold
         env:
