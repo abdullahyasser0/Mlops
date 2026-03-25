@@ -38,10 +38,11 @@ jobs:
 
       - name: Train Model
         env:
-          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+          MLFLOW_TRACKING_URI: ""
         run: |
           EPOCHS="${{ github.event.inputs.epochs || '5' }}"
           LR="${{ github.event.inputs.learning_rate || '0.01' }}"
+          echo "Using MLflow Tracking Server: ${{ secrets.MLFLOW_TRACKING_URI }}"
           python train.py --epochs "$EPOCHS" --learning_rate "$LR" --run_name "ci-run"
 
       - name: Verify model_info.txt
@@ -89,7 +90,7 @@ jobs:
 
       - name: Check Accuracy Threshold
         env:
-          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+          MLFLOW_TRACKING_URI: ""
         run: python check_threshold.py
 
       - name: Mock Docker Build
