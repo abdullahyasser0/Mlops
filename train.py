@@ -171,7 +171,12 @@ def main(args):
         with tempfile.TemporaryDirectory() as tmp_dir:
             mlflow.pytorch.save_model(model, tmp_dir)
             mlflow.log_artifacts(tmp_dir, artifact_path="mnist_mlp")
-        print("Run finished. Model saved to MLflow.")
+
+        # ── Export Run ID ─────────────────────────────────────────────────────
+        run_id = mlflow.active_run().info.run_id
+        with open("model_info.txt", "w") as f:
+            f.write(run_id)
+        print(f"Run finished. Run ID: {run_id}")
 
 
 # ── CLI ──────────────────────────────────────────────────────────────────────

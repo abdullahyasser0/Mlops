@@ -1,0 +1,96 @@
+name: ML Pipeline
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      epochs:
+        description: "Number of training epochs"
+        required: false
+        default: "5"
+      learning_rate:
+        description: "Learning rate"
+        required: false
+        default: "0.01"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Pull Data with DVC
+        run: |
+          pip install dvc
+          dvc pull || echo "DVC pull skipped (no remote configured)"
+
+      - name: Train Model
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+        run: |
+          EPOCHS="${{ github.event.inputs.epochs || '5' }}"
+          LR="${{ github.event.inputs.learning_rate || '0.01' }}"
+          python train.py --epochs "$EPOCHS" --learning_rate "$LR" --run_name "ci-run"
+
+      - name: Verify model_info.txt
+        run: |
+          cat model_info.txt
+          echo "model_info.txt created successfully"
+
+      - name: Upload model_info artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-info
+          path: model_info.txt
+
+      - name: Upload MLflow tracking data
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlruns-data
+          path: mlruns/
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: pip install mlflow
+
+      - name: Download model_info.txt
+        uses: actions/download-artifact@v4
+        with:
+          name: model-info
+
+      - name: Download MLflow tracking data
+        uses: actions/download-artifact@v4
+        with:
+          name: mlruns-data
+          path: mlruns/
+
+      - name: Check Accuracy Threshold
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+        run: python check_threshold.py
+
+      - name: Mock Docker Build
+        run: echo "Building Docker image for Run ID: $(cat model_info.txt)"
