@@ -174,7 +174,7 @@ def main(args):
             mlflow.pytorch.save_model(model, tmp_dir)
             mlflow.log_artifacts(tmp_dir, artifact_path="mnist_mlp")
 
-        # ── Export Run ID ─────────────────────────────────────────────────────
+        # ── Export Run ID ────────────────────────────────────────────────────
         run_id = mlflow.active_run().info.run_id
         with open("model_info.txt", "w") as f:
             f.write(run_id)
