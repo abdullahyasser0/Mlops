@@ -161,7 +161,7 @@ def main(args):
                 f"val_loss={val_loss:.4f}  val_acc={val_acc:.4f}"
             )
 
-        # ── Evaluation table ─────────────────────────────────────────────────
+        # ── Evaluation table ─────────────────────────────────────────────────----------------------------------------------------
         eval_df = build_eval_table(model, test_loader, device)
         mlflow.log_table(
             data=eval_df,
