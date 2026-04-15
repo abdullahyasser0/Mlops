@@ -25,6 +25,23 @@ jobs:
 
       - name: Run Linter
         run: flake8 train.py
+      - name: Capture Error Logs
+        if: failure()
+        run: |
+          echo "=== Training Job Failed ===" > error_logs.txt
+          echo "Timestamp : $(date -u)" >> error_logs.txt
+          echo "Branch    : ${{ github.ref }}" >> error_logs.txt
+          echo "Commit SHA: ${{ github.sha }}" >> error_logs.txt
+          echo "Commit msg: ${{ github.event.head_commit.message }}" >> error_logs.txt
+          echo "" >> error_logs.txt
+          echo "Check the step logs above for the full stack trace." >> error_logs.txt
+
+      - name: Upload error_logs artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: error-logs
+          path: error_logs.txt
 
   train:
     name: Train Model
