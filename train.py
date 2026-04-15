@@ -161,7 +161,7 @@ def main(args):
                 f"val_loss={val_loss:.4f}  val_acc={val_acc:.4f}"
             )
 
-        # ── Evaluation table ─────────────────────────────────────────────────----------------------------------------------------
+        # ── Evaluation table ─────────────────────────────────────────────────
         eval_df = build_eval_table(model, test_loader, device)
         mlflow.log_table(
             data=eval_df,
@@ -175,7 +175,7 @@ def main(args):
             mlflow.log_artifacts(tmp_dir, artifact_path="mnist_mlp")
 
         # ── Export Run ID ────────────────────────────────────────────────────
-        run_id = mlflow.active_run().info.run_id
+        run_id = mllow.active_run().info.run_id
         with open("model_info.txt", "w") as f:
             f.write(run_id)
         print(f"Run finished. Run ID: {run_id}")
