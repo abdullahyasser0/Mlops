@@ -3,9 +3,7 @@ name: ML Model CI
 
 on:
   push:
-    branches-ignore:
-      - master
-  pull_request:
+    branches: [testing]
 
 jobs:
   validate-and-test:
