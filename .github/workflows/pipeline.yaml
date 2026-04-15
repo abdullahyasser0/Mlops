@@ -8,7 +8,6 @@ on:
 
 jobs:
 
-  # ── Gatekeeper Stage 1: lightweight lint check ──────────────────────────────
   linter:
     name: Linter
     runs-on: ubuntu-latest
@@ -27,14 +26,11 @@ jobs:
       - name: Run Linter
         run: flake8 train.py
 
-  # ── Gatekeeper Stage 2: expensive GPU training (triple-gated) ───────────────
   train:
     name: Train Model
     runs-on: ubuntu-latest
     needs: linter
-    # Gate 1 – linter must pass
-    # Gate 2 – only the main branch
-    # Gate 3 – commit message must contain [run-train]
+
     if: |
       needs.linter.result == 'success' &&
       github.ref == 'refs/heads/master' &&
@@ -68,7 +64,6 @@ jobs:
           DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
         run: python train.py --epochs 5 --learning_rate 0.01 --run_name "ci-run"
 
-      # ── Failure handler: capture logs so devs can debug without re-running ──
       - name: Capture Error Logs
         if: failure()
         run: |
@@ -87,7 +82,6 @@ jobs:
           name: error-logs
           path: error_logs.txt
 
-      # ── Always runs: cleanup regardless of success or failure ───────────────
       - name: Cleanup
         if: always()
         run: echo "Cleaning up temporary cloud volumes..."
