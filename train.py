@@ -181,7 +181,7 @@ def main(args):
         print(f"Run finished. Run ID: {run_id}")
 
 
-# ── CLI ──────────────────────────────────────────────────────────────────────
+# ── CLI ──────────────────────────────────────────────────────────────────────---------------------
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="MNIST MLP with MLflow tracking"
